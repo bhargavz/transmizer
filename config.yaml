@@ -1,0 +1,77 @@
+# transmizer configuration
+
+whisper:
+  # Model size tradeoff: speed vs accuracy
+  #   tiny.en   fastest, lower accuracy
+  #   base.en   good balance for English  ← default
+  #   small.en  noticeably better
+  #   medium.en great accuracy, handles accents/noise well
+  #   large-v3  best quality, multilingual
+  # Remove the ".en" suffix for non-English audio.
+  model: medium.en
+
+  device: cuda           # cuda / cpu / auto
+  compute_type: float16  # float16 = optimal for NVIDIA; int8 for CPU
+
+  # GPU routing — smaller models on 3060, larger on 4070
+  device_index: 1        # RTX 3060 — used for tiny / base models
+  device_index_large: 0  # RTX 4070 — used for small / medium / large models
+
+  # Force a language (e.g. "en", "es"). null = auto-detect.
+  language: null
+
+  # Where downloaded Whisper models are cached.
+  # Default: C:\Users\<you>\.cache\huggingface\hub\
+  # Override example: D:\models\whisper
+  cache_dir: null
+
+ollama:
+  host: http://localhost:11434
+
+  # Models you have installed:
+  #   qwen3-coder:30b      ← best quality (18 GB)
+  #   qwen3-coder-cc:latest
+  #   llava-llama3:latest  ← faster fallback
+  model: qwen3-coder:30b
+
+  # Max seconds to wait for a response (large models are slow)
+  timeout: 600
+
+  # Context window in tokens. 32768 handles ~2-hour meetings.
+  # Increase to 65536 for very long recordings if your model supports it.
+  num_ctx: 32768
+
+output:
+  # Append the full transcript to the markdown file
+  include_transcript: true
+
+  # Wrap the transcript in a collapsible <details> block
+  # (renders collapsed in Obsidian, GitHub, etc.)
+  transcript_collapsible: true
+
+merge:
+  # Files recorded within this many minutes of each other are treated as one session
+  gap_minutes: 60
+
+  # Ask the LLM to verify adjacent files are from the same meeting before merging.
+  # Adds ~5s per pair but prevents accidental cross-session merges.
+  llm_check: false
+
+# HiDock P1 auto-sync (p1_sync.py). The device is only ever read from.
+p1_sync:
+  # Where finished notes go (relative to this folder, or an absolute path)
+  output_dir: output
+
+  # Where MP3s are staged while they are being processed
+  download_dir: input/p1
+
+  # Ignore recordings made before this date (null = everything on the device)
+  since: 2026-11-01
+
+  # Remove the local MP3 once its note is written (the P1 copy is untouched)
+  delete_audio_after_success: true
+
+  # Watcher: how often to look for the device, and how often to re-check for
+  # new recordings while it stays plugged in (0 = only on connect)
+  poll_seconds: 5
+  resync_minutes: 30

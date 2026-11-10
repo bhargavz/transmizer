@@ -1,0 +1,13 @@
+# Voice-to-text (OpenAI Whisper, runs 100% locally)
+# Requires ffmpeg on PATH: winget install ffmpeg
+faster-whisper>=1.1.0
+
+# Filesystem watching (already installed on your machine)
+watchdog>=4.0.0
+
+# YAML config parsing
+PyYAML>=6.0
+
+# HiDock P1 USB access for p1_sync.py (libusb-package bundles libusb-1.0.dll)
+pyusb>=1.3.0
+libusb-package>=1.0.26

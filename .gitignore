@@ -1,0 +1,22 @@
+# Personal data: recordings, generated notes/transcripts, sync state, logs
+input/*
+!input/.gitkeep
+output/*
+!output/.gitkeep
+p1_state.json
+logs/
+
+# Local scratch / tooling state
+.tmp/
+.remember/
+.claude/
+*.part
+
+# Secrets
+.env
+*.key
+
+# Python
+__pycache__/
+*.pyc
+.venv/
